@@ -1,35 +1,35 @@
 import { observable } from 'mobx'
 import client from '../services/client'
-
 import * as authServices from '../services/authServices'
+import getToken from '../services/getToken'
 
 class AuthStore {
   @observable user = null
-  @observable token = localStorage.getItem('token')
-  @observable appLoaded = false
-  @observable authorizing = false
+  @observable token = getToken()
+  @observable loading = false
 
   pullUser = async () => {
     const { data } = await authServices.getUserData()
 
     this.user = data
-    this.appLoaded = true
   }
 
-  login = async code => {
-    this.authorizing = true
+  login = async ({ accessToken }) => {
+    this.loading = true
 
-    const res = await authServices.login(code)
+    try {
+      const {
+        data: { token }
+      } = await authServices.login(accessToken)
 
-    const { token } = res.data
-    console.log(res)
-    console.log(token)
-    this.token = token
-    localStorage.setItem('token', token)
-    client.defaults.headers['Authorization'] = `Bearer ${token}`
-    this.pullUser()
-
-    this.authorizing = false
+      this.loading = false
+      this.token = token
+      localStorage.setItem('token', token)
+      client.defaults.headers['Authorization'] = `Bearer ${token}`
+    } catch (error) {
+    } finally {
+      this.loading = false
+    }
   }
 }
 

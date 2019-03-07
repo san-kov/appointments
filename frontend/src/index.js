@@ -6,9 +6,11 @@ import App from './App'
 import { Provider } from 'mobx-react'
 
 import authStore from './stores/authStore'
+import appointmentStore from './stores/appointmentStore'
 
 const stores = {
-  authStore
+  authStore,
+  appointmentStore
 }
 
 ReactDOM.render(

@@ -1,12 +1,25 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
-const userSchema = new mongoose.Schema({
-  github_id: {
+export const userSchema = new mongoose.Schema({
+  google_id: {
     type: String,
     required: true
   },
-  name: String,
-  avatar: String
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  avatar: String,
+  appointments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'appointment'
+    }
+  ]
 })
 
 export default mongoose.model('user', userSchema)

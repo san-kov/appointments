@@ -1,7 +1,7 @@
 import passport from 'passport'
-import GithubTokenStrategy from 'passport-github-token'
+import GooglePlusStraregy from 'passport-google-plus-token'
 import User from '../models/User'
-import { githubClientID, githubClientSecret, jwtSecret } from './keys'
+import { jwtSecret, googleClientID, googleClientSecret } from './keys'
 import JWTStrategy from 'passport-jwt'
 
 passport.use(
@@ -28,28 +28,35 @@ passport.use(
 )
 
 passport.use(
-  'github-token',
-  new GithubTokenStrategy(
+  'google',
+  new GooglePlusStraregy(
     {
-      clientID: githubClientID,
-      clientSecret: githubClientSecret
+      clientID: googleClientID,
+      clientSecret: googleClientSecret
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const { id, username } = profile
+        const {
+          id,
+          displayName,
+          emails,
+          _json: {
+            image: { url }
+          }
+        } = profile
         const user = await User.findOne({
-          github_id: id
+          google_id: id
         })
 
         if (user) {
           return done(null, user)
         }
 
-        console.log(profile)
         const newUser = await User.create({
-          github_id: id,
-          name: username,
-          avatar: profile._json.avatar_url
+          google_id: id,
+          name: displayName,
+          email: emails[0].value,
+          avatar: url
         })
 
         done(null, newUser)

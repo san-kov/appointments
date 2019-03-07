@@ -1,50 +1,39 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import styled from 'styled-components'
+import HeaderWrapper, { TopBorder } from './styled/HeaderWrapper'
+import { FaBell } from 'react-icons/fa'
 
-const HeaderWrapper = styled.div`
-  display: flex;
-  padding: 5px;
-  height: 50px;
-  border-bottom: 1px solid rgb(235, 235, 235);
-
-  > nav {
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    display: flex;
-
-    > li {
-      height: 100%;
-      padding: 0;
-      margin: 0;
-      list-style-type: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      > img {
-        widht: 100%;
-        height: 100%;
-      }
-    }
-  }
-`
-
-@inject('authStore')
+@inject('authStore', 'appointmentStore')
 @observer
 class Header extends React.Component {
+  componentDidMount() {
+    this.props.authStore.pullUser()
+  }
   render() {
-    const { avatar, name } = this.props.authStore.user
-
+    const { user } = this.props.authStore
+    const { notifications } = this.props.appointmentStore
     return (
-      <HeaderWrapper>
-        <nav className="right">
-          <li>
-            <img src={avatar} alt="" />
-          </li>
-        </nav>
-      </HeaderWrapper>
+      <div>
+        <TopBorder />
+        <HeaderWrapper>
+          <nav>
+            <li>
+              <img src={user && user.avatar} alt="" />
+              <p>{user && user.name}</p>
+            </li>
+          </nav>
+          <nav>
+            <li>
+              <div className="notification">
+                <FaBell className="icon" size="23px" />
+                {notifications > 0 && (
+                  <div className="not-num">{notifications}</div>
+                )}
+              </div>
+            </li>
+          </nav>
+        </HeaderWrapper>
+      </div>
     )
   }
 }

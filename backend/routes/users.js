@@ -6,10 +6,9 @@ import * as UsersController from '../controllers/UsersController'
 const router = new Router()
 
 router.post(
-  '/auth/github',
-  UsersController.extractAccessToken,
-  passport.authenticate('github-token', { session: false }),
-  UsersController.authGithub
+  '/auth',
+  passport.authenticate('google', { session: false }),
+  UsersController.authGoogle
 )
 
 router.get(

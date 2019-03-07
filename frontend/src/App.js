@@ -2,32 +2,15 @@ import React, { Component } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 
-import Welcome from './pages/Welcome'
 import Home from './pages/Home'
 import Header from './components/Header'
-
+import Welcome from './pages/Welcome'
 @inject('authStore')
 @observer
 class App extends Component {
-  componentDidMount() {
-    const { pullUser, token } = this.props.authStore
-
-    if (token) {
-      pullUser()
-    }
-  }
   render() {
-    const { token, appLoaded, authorizing } = this.props.authStore
-
-    if (authorizing) {
-      return null
-    }
-
-    if (!token) {
-      return <Welcome />
-    }
-
-    if (appLoaded) {
+    const { token } = this.props.authStore
+    if (token) {
       return (
         <div>
           <BrowserRouter>
@@ -42,7 +25,7 @@ class App extends Component {
       )
     }
 
-    return null
+    return <Welcome />
   }
 }
 

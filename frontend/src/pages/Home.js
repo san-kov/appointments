@@ -1,14 +1,32 @@
 import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
 
-@inject('authStore')
+@inject('appointmentStore')
 @observer
 class Home extends Component {
+  componentDidMount() {
+    const { pullAppointments } = this.props.appointmentStore
+
+    pullAppointments()
+  }
   render() {
-    const { user } = this.props.authStore
+    const { appointments, loading } = this.props.appointmentStore
+    if (loading) return <p>loading</p>
     return (
       <div>
-        <h1>hello, {user.name}</h1>
+        <div style={{ margin: 10 }}>
+          {appointments.length > 0
+            ? appointments.map(a => (
+                <p key={a._id}>
+                  {a.title}
+                  <br />
+                  {a.description}
+                  <br />
+                  <b>{a.owner.name}</b>
+                </p>
+              ))
+            : 'You have no appointments'}
+        </div>
       </div>
     )
   }
