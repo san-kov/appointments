@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
+import Appointments from '../components/Appointments'
 
 @inject('appointmentStore')
 @observer
 class Home extends Component {
   componentDidMount() {
-    const { pullAppointments } = this.props.appointmentStore
+    const { pullAppointments, loaded } = this.props.appointmentStore
 
-    pullAppointments()
+    if (!loaded) {
+      pullAppointments()
+    }
+
+    console.log(loaded)
+    console.log('mounted')
   }
   render() {
     const { appointments, loading } = this.props.appointmentStore
@@ -15,17 +21,11 @@ class Home extends Component {
     return (
       <div>
         <div style={{ margin: 10 }}>
-          {appointments.length > 0
-            ? appointments.map(a => (
-                <p key={a._id}>
-                  {a.title}
-                  <br />
-                  {a.description}
-                  <br />
-                  <b>{a.owner.name}</b>
-                </p>
-              ))
-            : 'You have no appointments'}
+          {appointments.length > 0 ? (
+            <Appointments appoints={appointments} />
+          ) : (
+            'You have no appointments'
+          )}
         </div>
       </div>
     )

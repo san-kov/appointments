@@ -5,6 +5,8 @@ import { observer, inject } from 'mobx-react'
 import Home from './pages/Home'
 import Header from './components/Header'
 import Welcome from './pages/Welcome'
+import AddAppointment from './pages/AddAppointment'
+
 @inject('authStore')
 @observer
 class App extends Component {
@@ -17,7 +19,8 @@ class App extends Component {
             <div>
               <Header />
               <Switch>
-                <Route path="/" component={Home} />
+                <Route path="/" exact component={Home} />
+                <Route path="/add" exact component={AddAppointment} />
               </Switch>
             </div>
           </BrowserRouter>

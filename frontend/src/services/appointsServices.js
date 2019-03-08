@@ -1,5 +1,6 @@
 import client from './client'
 
-export const getMyAppoints = () => {
-  return client.get('/appoints/')
-}
+export const getMyAppoints = () => client.get('/appoints/')
+
+export const addAppointment = appointment =>
+  client.post('/appoints/', appointment)

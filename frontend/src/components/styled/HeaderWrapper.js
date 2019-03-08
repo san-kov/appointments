@@ -24,7 +24,8 @@ const HeaderWrapper = styled.div`
     margin: 0;
     display: flex;
 
-    > li {
+    > li,
+    a {
       height: 100%;
       padding: 0 4px 0 4px;
       margin: 0;
@@ -35,6 +36,8 @@ const HeaderWrapper = styled.div`
       margin: 0 4px 0 4px;
       cursor: pointer;
       transition: all 0.2s ease-in-out;
+      text-decoration: none;
+      color: rgb(17, 17, 17);
       > p {
         margin-left: 5px;
       }

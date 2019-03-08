@@ -1,9 +1,10 @@
 import { observable, action } from 'mobx'
-import { getMyAppoints } from '../services/appointsServices'
+import { getMyAppoints, addAppointment } from '../services/appointsServices'
 class AppointmentStore {
   @observable notifications = 0
   @observable appointments = []
   @observable loading = false
+  @observable loaded = false
 
   pullAppointments = async () => {
     this.setLoading(true)
@@ -12,10 +13,23 @@ class AppointmentStore {
     console.log(data)
     this.appointments = data.appointments
     this.setLoading(false)
+    this.setLoaded()
   }
 
-  @action setLoading(loading) {
+  @action setLoaded = () => {
+    this.loaded = true
+  }
+  @action setLoading = loading => {
     this.loading = loading
+  }
+
+  addAppointment = async appointment => {
+    this.setLoading(true)
+    const app = await addAppointment(appointment)
+    this.appointments.push(app.data)
+    this.setLoading(false)
+
+    console.log(app.data)
   }
 }
 

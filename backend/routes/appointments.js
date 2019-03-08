@@ -11,4 +11,10 @@ router.get(
   AppointmentsController.getMyAppointments
 )
 
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  AppointmentsController.addAppointment
+)
+
 export default router

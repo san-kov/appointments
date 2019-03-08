@@ -13,6 +13,10 @@ const appointmentSchema = new mongoose.Schema({
     ref: 'user',
     required: true
   },
+  date: {
+    type: Date,
+    required: true
+  },
   participants: [
     {
       type: Schema.Types.ObjectId,
